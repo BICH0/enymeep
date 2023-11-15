@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enymeep - Panel</title>
+</head>
+<link rel="stylesheet" href="/webpage/css/main.css">
+<style>
+    img{
+        width: 150px;
+        margin: 0px 0px 0px 240px;
+        /* background-color: #3f3f3f; */
+        padding: 10px 20px;
+        filter: invert();
+        box-shadow: 10px 10px white;
+        /* transition: transform .2s; */
+    }
+    #nav{
+        display: flex;
+        position: sticky;
+        flex-direction: column;
+        background-color: #252525;
+        max-width: 430px;
+        transform: translateX(-240px) translateY(-180px);
+        overflow-x: hidden;
+        transition: transform .5s .2s, box-shadow .2s, max-width .2s;
+    }
+    #nav:hover{
+        box-shadow: 10px 10px black;
+        transform: translateX(0) translateY(0);
+        max-width: 240px;
+        overflow-x: hidden;
+        transition: transform .5s, box-shadow .2s, max-width .2s .2s;
+    }
+    #access-pan{
+        /* transform: scale(0);
+        transform-origin: top left;
+        transition: .5s transform; */
+        /* position: absolute; */
+        color: white;
+        width: 180px;
+        padding: 0px 30px 20px 30px;
+        display: flex;
+        flex-direction: column;
+    }
+    #access-pan *{
+        text-align: center;
+        margin-top: 20px;
+    }
+    #access-pan input{
+        padding: 5px 0;
+    }
+    form{
+        margin-top: 50px;
+        background-color: #252525;
+        display: flex;
+    }
+    form input{
+        margin: 0px 10px;
+    }
+
+</style>
+<body>
+    <div id="wrapper">
+        <div id="nav">
+            <div id="access-pan">
+                <span>User:</span>
+                <input type="button" value="Change Password">
+                <input type="button" value="Logout">
+            </div>
+            <img src="/webpage/resources/logo.png">
+        </div>
+        <form method="get" action="/query">
+            <input type="text" class="text-input" name="ip" placeholder="127.0.0.1">
+            <input type="text" class="text-input" name="ports" placeholder="80,22,443">
+            <input type="submit" value="Scan">
+        </form>
+        <div id="result">
+            <div><span>Address</span><span>Port</span><span>Status</span></div>
+
+        </div>
+    </div>
+</body>
+<script>
+    const resultTable = document.getElementById("result")
+    function drawResult(dataArray){
+        dataArray.forEach(entry =>{
+            const item = document.createElement("div")
+            item.innerHTML="<span></span><span></span>"
+        })
+    }
+</script>
+</html>
