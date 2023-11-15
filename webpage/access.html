@@ -8,21 +8,21 @@
     <link rel="stylesheet" href="/webpage/css/main.css">
     <style>
         #wrapper img{
-            margin: 20px auto;
+            margin: 80px auto;
             /* position: relative; */
             display: block;
-            filter: drop-shadow(5px 5px #00000020);
+            filter: drop-shadow(5px 5px var(--shadow-low));
         }
         #login{
             display: flex;
             flex-direction: column;
             width: 25vw;
             margin: 20px auto 0 auto;
-            background-color: #252525;
+            background-color: var(--container-bg);
             color: white;
             padding: 20px;
             /* border-radius: .5rem; */
-            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.37);
+            box-shadow: 10px 10px 0px var(--shadow-low);
         }
         #extra{
             display: flex;
@@ -37,7 +37,7 @@
         #cookies{
             position: fixed;
             bottom: 0px;
-            background-color: #414141;
+            background-color: var(--input-bg);
             color: white;
             padding: 10px 20px 30px 20px;
             width: 100vw;
@@ -46,13 +46,18 @@
         }
         #cookies input:nth-of-type(2){
             margin-left: 20px;
-            background-color: #daff35;
+            background-color: var(--accent2);
             transition: transform .3s, box-shadow .2s, text-shadow .2s, background-color .2s;
             overflow: hidden;
         }
         .wiggle{
             animation: linear .3s wiggle;
 
+        }
+        footer{
+            opacity: 0;
+            transition: opacity .5s;
+            visibility: hidden;
         }
         @keyframes wiggle {
             0%{
@@ -94,17 +99,14 @@
     </div>
     <footer>Enymeep by us <span id="date"></span></footer>
 </body>
+<script src="/webpage/js/common.js"></script>
 <script>
     const wrapper = document.getElementById("wrapper")
     const form = document.getElementById("login")
     const extra = document.getElementById("extra")
     const changeMode = form.getElementsByTagName("p")[0]
     const submit = form.querySelectorAll("input[type=submit]")[0]
-
-    var sleep = function(ms){
-        return new Promise(resolve => setTimeout(resolve, ms));
-    };
-
+    
     async function loadForm(){
         var mode = form.getAttribute("action")
         extra.style.maxHeight="0px"
@@ -144,9 +146,10 @@
     }
     async function main(){
         await loadForm();
-        document.getElementById("date").innerText = new Date().getFullYear()
+        
         // await showCookies();
     }
-    window.onload = main();
+    window.onload = globalMain()
+
 </script>
 </html>

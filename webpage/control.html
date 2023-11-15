@@ -11,34 +11,77 @@
     img{
         width: 150px;
         margin: 0px 0px 0px 240px;
-        /* background-color: #3f3f3f; */
         padding: 10px 20px;
-        filter: invert();
-        box-shadow: 10px 10px white;
-        /* transition: transform .2s; */
+        box-shadow: 10px 10px var(--shadow-mid);
+        background-color: var(--container-bg);
+        transition: .2s background-color, .2s box-shadow;
+    }
+    #nav img:hover{
+        background-color: var(--input-bg);
+        box-shadow: 5px 5px 5px var(--accent);
     }
     #nav{
+        z-index: 100;
         display: flex;
-        position: sticky;
+        position: fixed;
+        top: 0;
         flex-direction: column;
-        background-color: #252525;
         max-width: 430px;
-        transform: translateX(-240px) translateY(-180px);
+        transform: translateX(-240px) translateY(-183px);
+        padding: 0 10px 10px 0;
+        margin: 0 -10px -10px 0;
         overflow-x: hidden;
-        transition: transform .5s .2s, box-shadow .2s, max-width .2s;
+        transition: transform .5s .5s, box-shadow .2s .5s, max-width .2s .6s, background-color .2s .93s;
     }
-    #nav:hover{
-        box-shadow: 10px 10px black;
+    #nav.openned{
+        box-shadow: 10px 10px var(--shadow-mid);
+        background-color: var(--container-bg);
         transform: translateX(0) translateY(0);
-        max-width: 240px;
+        max-width: 230px;
         overflow-x: hidden;
-        transition: transform .5s, box-shadow .2s, max-width .2s .2s;
+        transition: transform .5s .1s, box-shadow .2s .3s, max-width .2s .2s, background-color .2s;
+    }
+    #nav p{
+        margin: 20px 0 0 0;
+    }
+    #pwd-form{
+        z-index: -1;
+        width: 140px;
+        max-height: 0;
+        overflow-y: hidden;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 39px;
+        left: 30px;
+        background-color: var(--accent);
+        color: black;
+        padding: 0 20px 10px 20px;
+        transition: .5s max-height;
+    }
+    #pwd-form.open{
+        max-height: 300px;
+    }
+    #pwd-form input[type="password"]{
+        margin: 0;
+        background-color: var(--active);
+        border: none;
+        box-shadow: 5px 5px var(--shadow-mid);
+    }
+    #pwd-form label{
+        margin-top: 10px;
+        padding: 0;
+    }
+    #pwd-form input[type="submit"]{
+        margin-top: 20px;
+        background-color: var(--active);
+        box-shadow: 5px 5px var(--shadow-mid);
+    }
+    #pwd-form input[type="submit"]:hover{
+        background-color: white !important;
     }
     #access-pan{
-        /* transform: scale(0);
-        transform-origin: top left;
-        transition: .5s transform; */
-        /* position: absolute; */
+        background-color: var(--container-bg);
         color: white;
         width: 180px;
         padding: 0px 30px 20px 30px;
@@ -52,44 +95,225 @@
     #access-pan input{
         padding: 5px 0;
     }
-    form{
-        margin-top: 50px;
-        background-color: #252525;
+    #container{
+        position: absolute;
+        margin: 0 auto;
+        top: 150px;
+        width: 100%;
+        padding-bottom: 50px;
+    }
+    #fetched,#custom,#result{
+        position: relative;
+        width: 45vw;
+        margin: 10px auto;
+        padding: 5px 10px;
+        background-color: rgba(0,0,0,.1);
+    }
+    #fetched h1,#custom h1, #result h1{
+        padding: 0 20px 0 10px;
+    }
+    #fetched-header span{
+        font-size: 1rem;
+    }
+    #fetched div, #result>div, #result .entry-name{
         display: flex;
+        padding: 0 20px;
+        position: relative;
     }
-    form input{
-        margin: 0px 10px;
+    #fetched div:not(#fetched div:first-of-type),#result>div:not(#result>div:first-of-type){
+        border-top: 1px solid black;
     }
-
+    #fetched div input, #result div input, #custom input[type="button"]{
+        margin: 10px;
+        position: absolute;
+        right: 0;
+    }
+    #fetched div p, #result div p{
+        width: 300px;
+        line-height: 57px;
+        margin: 0 0 0 15px;
+    }
+    #custom div{
+        position: relative;
+        padding: 0 20px 20px 20px;
+    }
+    #custom div form{
+        position: relative;
+    }
+    #custom input[type="text"]{
+        line-height: calc(2rem - 10px);
+        background-color: rgba(0,0,0,.1);
+        overflow-x: scroll;
+        color: black;
+        padding: 8px 0 5px 5px;
+        font-size: 16px;
+        width: 35%;
+    }
+    #custom input[type="button"]{
+        margin: 0px;
+        right: 10px;
+    }
+    #result .entry-name{
+        padding: 0;
+    }
+    #result .entry{
+        flex-direction: column;
+        padding-right: 0;
+    }
+    #result .entry-data{
+        padding: 0 20px;
+        max-height: 0;
+        display: flex;
+        transition: max-height ease-out .5s;
+        overflow-x: hidden;
+    }
+    #result .entry-data.show{
+        max-height: 100vh;
+        transition: max-height ease-out 2s;
+    }
 </style>
 <body>
     <div id="wrapper">
         <div id="nav">
             <div id="access-pan">
-                <span>User:</span>
-                <input type="button" value="Change Password">
-                <input type="button" value="Logout">
+                <p>User: <span id="username"></span> | 🪙 <span id="tokens"></span></p>
+                <input type="button" onclick="changePwd(this)" value="Change Password">
+                <form action="/password" method="get" id="pwd-form">
+                    <label for="pwd">Password:</label><input type="password" name="pwd">
+                    <label for="pwd2">Repeat Password:</label><input type="password" name="pwd2">
+                    <input type="submit" value="Change!">
+                </form>
+                <input type="button" onclick="logout()" value="Logout">
             </div>
-            <img src="/webpage/resources/logo.png">
+            <img src="/webpage/resources/logo_2.png">
         </div>
-        <form method="get" action="/query">
-            <input type="text" class="text-input" name="ip" placeholder="127.0.0.1">
-            <input type="text" class="text-input" name="ports" placeholder="80,22,443">
-            <input type="submit" value="Scan">
-        </form>
-        <div id="result">
-            <div><span>Address</span><span>Port</span><span>Status</span></div>
-
+        <div id="container">
+            <div id="fetched">
+                <h1>Try with some safe IP's <span>(pssst, this ones are free)</span></h1>
+            </div>
+            <div id="custom">
+                <h1>Scan some ipzzz</h1>
+                <div>
+                    <input type="text" required size="14" class="text-input" name="ip" placeholder="127.0.0.1">
+                    <input type="text" required size="14" class="text-input" name="ports" placeholder="80,22,443">
+                    <input type="button" onclick="customWrapper(this)" value="Scan">
+                </div>
+            </div>
+            <div id="result">
+                <h1>Scan results</h1>
+            </div>
         </div>
     </div>
+    <footer>Enymeep by us <span id="date"></span></footer>
 </body>
+<script src="/webpage/js/common.js"></script>
 <script>
     const resultTable = document.getElementById("result")
+    const navItem = document.getElementById("nav")
+    const fetched = document.getElementById("fetched")
+    const pwdForm = document.getElementById("pwd-form")
+    const username = document.getElementById("username")
+    const tokens = document.getElementById("tokens")
+    var menuOpen = 0;
+
+    navItem.addEventListener("click",async e =>{
+        if (menuOpen == 0){
+            navItem.getElementsByTagName("img")[0].classList.remove("wiggle")
+            menuOpen=1;
+            navItem.classList.add("openned")
+            await sleep(500);
+            menuOpen=2
+        }
+        async function closeMen(e){
+            if (! navItem.contains(e.target) && menuOpen == 2){
+                navItem.classList.remove("openned");
+                menuOpen=0;
+                document.removeEventListener("click", closeMen);
+            }
+        };
+        document.addEventListener("click", closeMen);
+    })
+
+    function changePwd(button){
+        pwdForm.style.zIndex = "1"
+        pwdForm.classList.add("open")
+        menuOpen=3
+        async function closePwd(e){
+            if (e.target != button && ! pwdForm.contains(e.target)){
+                pwdForm.classList.remove("open")
+                await sleep(500)
+                pwdForm.style.zIndex = "0"
+                menuOpen=2
+                document.removeEventListener("click", closePwd);
+            }
+        };
+        document.addEventListener("click", closePwd);
+    }
+    function showPorts(entry){
+        entry = entry.parentNode.parentNode.getElementsByClassName("entry-data")[0]
+        entry.classList.toggle("show")
+    }
     function drawResult(dataArray){
+        if (dataArray === undefined || dataArray.len == 0){
+            resultTable.innerHTML += "<div><p>Can't show data if there is none</p></div>"
+            return
+        }
         dataArray.forEach(entry =>{
             const item = document.createElement("div")
-            item.innerHTML="<span></span><span></span>"
+            item.classList = "entry"
+            item.innerHTML=`<div class='entry-name'><p>IP: ${entry.ip} Ports: ${Object.keys(entry.ports)}</p><input type='button' onclick='showPorts(this)' data-object='${JSON.stringify(entry)}' value='Show'></div>`
+            const container = document.createElement("div")
+            container.classList = "entry-data"
+            Object.entries(entry.ports).forEach(port =>{
+                const [num,status] = port;
+                const portNode = document.createElement("p")
+                portNode.innerHTML =`Port: ${num} Status: ${status}`
+                container.appendChild(portNode)
+            })
+            item.appendChild(container)
+            resultTable.appendChild(item)
         })
     }
+    function customWrapper(target){
+        const childs = target.parentNode.getElementsByTagName("input")
+        const values = [childs[0].value,childs[1].value]
+        values.forEach(val =>{
+            if (val == ""){
+                target.style.backgroundColor = "red"
+                target.value = "Empty value!!"
+                return
+            }
+        })
+        sendScan(values)
+    }
+    function sendScan(target){
+        var values = []
+        if (target instanceof Array){
+            values.push(target)
+        }else if (target instanceof HTMLInputElement) {
+            let pelement = target.parentNode.getElementsByTagName("p")[0].innerText.split(" ");
+            values.push(pelement[1],pelement[3])
+        }
+        console.log(values)
+        //Get scan with values
+        //Draw result with return
+    }
+    function drawFetched(items){
+        let c=0
+        items.forEach(item => {
+            const row = document.createElement("div")
+            row.innerHTML = `<p>IP: ${item.ip} Ports: ${item.ports}</p><input type='button' onclick='sendScan(this)' value='Go!'>`
+            fetched.appendChild(row)
+        })
+    }
+    function main(){
+        //Get from python
+        username.innerText = "BimBim"
+        tokens.innerText = 69
+        drawFetched([{ip:"192.168.77.224",ports:[22,80,25]},{ip:"192.168.77.1",ports:[80,443]}])
+        //v---- Delete on production
+        drawResult([{ip:"192.168.77.224",ports:{22:"Open",23:"Closed"}},{ip:"192.168.77.224",ports:{22:"Open",23:"Closed"}},{ip:"192.168.77.224",ports:{22:"Open",23:"Closed"}},{ip:"192.168.77.224",ports:{22:"Open",23:"Closed"}}]);
+    }
+    window.onload=globalMain()
 </script>
 </html>

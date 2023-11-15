@@ -1,3 +1,14 @@
+:root{
+    --shadow-low: #0000002d;
+    --shadow-mid: #0000005e;
+    --background: #a8fce0;
+    --accent: #35ff90;
+    --accent2: #daff35;
+    --active: #aeffd3;
+    --input-bg: #414141;
+    --container-bg: #252525;
+}
+
 @font-face {
     font-family: Minecraft;
     src: url(/webpage/resources/Minecraft.ttf);
@@ -6,7 +17,7 @@ body,html,#wrapper{
     font-family: Minecraft;
     margin: 0;
     padding: 0;
-    background-color: #a8fce0;
+    background-color: var(--background);
 }
 input{
     font-family: Minecraft;
@@ -14,13 +25,13 @@ input{
 }
 .text-input{
     /* border-radius: .5rem; */
-    background-color: #414141;
+    background-color: var(--input-bg);
     border: none;
-    color: #35ff90;
+    color: var(--accent);
     padding: 5px;
 }
 input[type="submit"],#cookies input, input[type="button"]{
-    background-color: #35ff90;
+    background-color: var(--accent);
     padding: 2px 20px;
     border: none;
     /* border-radius: .5rem; */
@@ -33,27 +44,24 @@ input[type="button"]:hover{
     box-shadow: 5px 5px black;
 }
 input[type="submit"]:hover,input[type="button"]:hover{
-    text-shadow: 3px 3px #0000002d;
-    background-color: #aeffd3 !important;
+    text-shadow: 3px 3px var(--shadow-low);
+    background-color: var(--active) !important;
 
 }
 footer{
     position: fixed;
     bottom: 0px;
-    background-color:#35ff90;
+    background-color:var(--accent);
     width: 100vw;
     text-align: center;
     padding: 5px 0;
-    opacity: 0;
-    transition: opacity .5s;
-    visibility: hidden;
 }
 .link{
-    color: #35ff90;
+    color: var(--accent);
     cursor: pointer;
     text-decoration: underline;
     transition: color .1s;
 }
 .link:hover{
-    color: #aeffd3
+    color: var(--active)
 }
