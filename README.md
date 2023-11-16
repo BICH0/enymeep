@@ -16,9 +16,9 @@
 * ### [Usage](#-usage)
 * ### [License](#-license)
 
-# 💻  Requirements
+# 💻 Requirements
 To run this app you only need [python3](https://www.python.org/downloads/)
-# 🚀  Installation
+# 🚀 Installation
 To install enymeep follow these steps:
 1. Clone the repository and set it as your working directory   
    ```
