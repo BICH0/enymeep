@@ -7,15 +7,6 @@ from os import mknod
 from random import shuffle
 from io import TextIOWrapper
 
-# Realiza un programa en python que reciba parámetros que detecte máquinas encendidas y puertos abiertos, por ejemplo el 80, 21,22; empleando los módulos para hacer ping y socket. Ejemplos de parámetros pueden ser:
-# -h ofrece ayuda y es opcional
-# -t espera una dirección ip del target y es obligatoria
-# - parámetro posicional con la ip o dirección de red
-# -p puerto a testear, por defecto el 80
-# -v n nivel de verbosidad
-# --open muestre sólo los puertos abiertos
-# o cualquiera que se te ocurra, pero el help debe dejar claro cómo usar el script
-# El programa mostrará los argumentos pasados y controlará los errores si no se pasan argumentos o se pasan de forma incorrecta.
 parser = argparse.ArgumentParser(
     prog='Enyemeep',
     description='Look for open ports',
@@ -48,7 +39,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '-Pn',"-8--D",
-    help='Get OS from TTL',
+    help='Assume all targets are online',
     action="store_true",
 )
 parser.add_argument(
@@ -58,7 +49,8 @@ parser.add_argument(
 )
 parser.add_argument(
     '-o',"--output",
-    help='Write a file with all the open/closed ports, verbosity level is used to write',
+    help='Write a file with all the open/closed ports, verbosity level is used to write, default path is /tmp/enymeep-<date>.txt',
+    dest="file",
     nargs='?', 
     default='false'
 )
@@ -255,10 +247,10 @@ def main():
     verbosity = int(args.verbosity)
     print('\n\nWelcome to Enymeep a python based nmap (but a lot worse, like, a lot)\n')
     verbosityHandler(stringItem("Verbosity level: 2",3))
-    if args.output != 'false':
+    if args.file != 'false':
         filename=f"/tmp/enymeep-{datetime.today().strftime('%Y%m%d_%H%M%S')}.txt"
-        if args.output is not None:
-            filename=args.output
+        if args.file is not None:
+            filename=args.file
         verbosityHandler(stringItem(f"Using {filename} as output file",3))
         try:
             filename = open(filename, "w")
