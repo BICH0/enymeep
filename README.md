@@ -11,10 +11,10 @@
 </div>
 
 # Index
-* ### [Requirements](#requirements)
-* ### [Installation](#installation)
-* ### [Usage](#usage)
-* ### [License](#license)
+* ### [Requirements](#-requirements)
+* ### [Installation](#-installation)
+* ### [Usage](#-usage)
+* ### [License](#-license)
 
 # 💻  Requirements
 To run this app you only need [python3](https://www.python.org/downloads/)
