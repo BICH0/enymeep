@@ -231,13 +231,15 @@ def scanPorts(ip,ports):
                 verbosityHandler(stringItem("    No route to host",1),bcolors.FAIL)
                 return
             else:
-                c=0
                 if type(e) == TimeoutError:
-                    verbosityHandler(stringItem(f"\n    - [{port}]: ",0),False,"")
+                    if (c > 1):
+                        verbosityHandler(stringItem("",1))
+                    verbosityHandler(stringItem(f"    - [{port}]: ",0),False,"")
                     verbosityHandler(stringItem("Open  ",0),bcolors.OKGREEN)
                 else:
                     verbosityHandler(stringItem(f"\nAn error has ocurred while scanning port {port}: {e.value}:",0),bcolors.FAIL)
                     print(e) 
+                c=1
         except Exception as e:
             verbosityHandler(stringItem(f"An exception has ocurred while scanning port {port}:",0),bcolors.FAIL)
             print(e)
