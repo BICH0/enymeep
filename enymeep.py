@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse
 from ping3 import ping
 from socket import socket
@@ -94,7 +95,6 @@ def checkPortValidity(ports):
             break
         if (port < 1 or port > 65535) or invalid: #Checking if port value is valid 1<port<65535
             invalidPorts.append(str(port))
-    print(invalidPorts)
     return invalidPorts
 
 def argParser(args):
@@ -131,7 +131,7 @@ def argParser(args):
     invalidPorts = res
     #FINAL TOUCHES-------------
     if args.randomize:
-        parsedArgs["ports"].shuffle()
+        shuffle(parsedArgs["ports"])
     #ERROR HANDLING------------
     if len(invalidPorts) > 0:
         invalidPorts = ",".join(invalidPorts)
@@ -157,8 +157,8 @@ def scanTarget(ip,ports,osprobe,pn):
             print("")
             return
     if osprobe:
-            verbosityHandler(stringItem("   Os: ",1),False,"")
-            verbosityHandler(stringItem("Disabled, TTL not available",1),bcolors.FAIL)
+            verbosityHandler(stringItem("   Os: ",0),False,"")
+            verbosityHandler(stringItem("Disabled, TTL not available",0),bcolors.FAIL)
             # ttl = ping(ipAddr, ttl=255)
             # if ttl<= 32:
             #     print("OS: Windows 95/98")
@@ -174,7 +174,6 @@ def scanTarget(ip,ports,osprobe,pn):
     print("")
 
 def testConnectivity(ip):
-    # print("bim bim, bam bam, cyka")
     status="Down"
     rvalue=None
     if verbosity == 2:
@@ -203,19 +202,21 @@ def scanPorts(ip,ports):
     c=1
     for port in ports:
         s = socket()
-        if port <= 9:
-            port=" "+str(port)
+        s.settimeout(3)
         try:
             socketRes = s.connect((ip,port))
             if c != 1:
                 print("")
                 c=1
+            if port <= 9:
+                port=" "+str(port)
             verbosityHandler(stringItem(f"    - [{port}]: ",0),False,"")
             verbosityHandler(stringItem("Open  ",0),bcolors.OKGREEN)
             s.close()
         except KeyboardInterrupt:
+            print("")
             verbosityHandler(stringItem("User finished process, exiting...",3),bcolors.FAIL)
-            break
+            return
         except OSError as e:
             if e.errno == 111:
                 if verbosity != 0:
@@ -230,10 +231,15 @@ def scanPorts(ip,ports):
                 verbosityHandler(stringItem("    No route to host",1),bcolors.FAIL)
                 return
             else:
-                verbosityHandler(stringItem(f"An error has ocurred while scanning port {port}:",0),bcolors.FAIL)
-                print(e)
+                c=0
+                if type(e) == TimeoutError:
+                    verbosityHandler(stringItem(f"\n    - [{port}]: ",0),False,"")
+                    verbosityHandler(stringItem("Open  ",0),bcolors.OKGREEN)
+                else:
+                    verbosityHandler(stringItem(f"\nAn error has ocurred while scanning port {port}: {e.value}:",0),bcolors.FAIL)
+                    print(e) 
         except Exception as e:
-            verbosityHandler(stringItem(f"An error has ocurred while scanning port {port}:",0),bcolors.FAIL)
+            verbosityHandler(stringItem(f"An exception has ocurred while scanning port {port}:",0),bcolors.FAIL)
             print(e)
 
 def main():
@@ -242,9 +248,9 @@ def main():
     global filename
     filename="false"
     args = parser.parse_args() #Recogemos los parametros {ip,port,verbosity}
-    scanParams=argParser(args) #Devolvemos {ports:List,ip:{addr: String,net: Bool,cidr: Int}}
     colorize = args.colorize
     verbosity = int(args.verbosity)
+    scanParams=argParser(args) #Devolvemos {ports:List,ip:{addr: String,net: Bool,cidr: Int}}
     print('\n\nWelcome to Enymeep a python based nmap (but a lot worse, like, a lot)\n')
     verbosityHandler(stringItem("Verbosity level: 2",3))
     if args.file != 'false':
@@ -258,7 +264,8 @@ def main():
             verbosityHandler(stringItem("An error has ocurred during log creation: ",0),bcolors.FAIL)
             print(e)
     verbosityHandler(stringItem(f"Arguments: {args}\n",3))
-    verbosityHandler(stringItem(f'Scanning {args.ip} for open ports {args.ports}',0),)
+    verbosityHandler(stringItem("Бим Бим Бам Бам Блять ",4))
+    verbosityHandler(stringItem(f'Scanning {args.ip} for open ports {args.ports}',0))
     ports=scanParams["ports"]
     ipAddr=scanParams["ip"]["addr"]
     try:
