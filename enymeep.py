@@ -16,13 +16,13 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     '-t','--target',
-    help='Ip to scan, can be a range.',
+    help='Ip to scan, can be a whole subnet.',
     dest="ip",
     required=True
     )
 parser.add_argument(
     '-p','--port',
-    help='Which port/s do you want to scan, if multiple, use commas port1,port2,port',
+    help='Which port/s do you want to scan, if multiple, use commas port1,port2,port or ranges 80-443',
     dest='ports',
     required=True
 )
