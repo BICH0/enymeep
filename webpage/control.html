@@ -96,18 +96,17 @@
         padding: 5px 0;
     }
     #container{
-        position: absolute;
+        position: relative;
         margin: 0 auto;
         top: 150px;
-        width: 100%;
+        width: 45vw;
         padding-bottom: 50px;
     }
     #fetched,#custom,#result{
         position: relative;
-        width: 45vw;
-        margin: 10px auto;
         padding: 5px 10px;
         background-color: rgba(0,0,0,.1);
+        margin: 10px 0;
     }
     #fetched h1,#custom h1, #result h1{
         padding: 0 20px 0 10px;
@@ -120,6 +119,10 @@
         padding: 0 20px;
         position: relative;
     }
+    #fetched div, .entry-name{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
     #fetched div:not(#fetched div:first-of-type),#result>div:not(#result>div:first-of-type){
         border-top: 1px solid black;
     }
@@ -127,6 +130,8 @@
         margin: 10px;
         position: absolute;
         right: 0;
+        box-shadow: 2px 2px var(--shadow-mid);
+
     }
     #fetched div p, #result div p{
         width: 300px;
@@ -136,6 +141,7 @@
     #custom div{
         position: relative;
         padding: 0 20px 20px 20px;
+        display: flex;
     }
     #custom div form{
         position: relative;
@@ -148,6 +154,10 @@
         padding: 8px 0 5px 5px;
         font-size: 16px;
         width: 35%;
+        box-shadow: 4px 4px var(--shadow-mid);
+    }
+    #custom input[type="text"]:first-of-type{
+        margin-right: 7px;
     }
     #custom input[type="button"]{
         margin: 0px;
@@ -170,6 +180,37 @@
     #result .entry-data.show{
         max-height: 100vh;
         transition: max-height ease-out 2s;
+        flex-wrap: wrap;
+    }
+    #result .entry-data p{
+        white-space: nowrap;
+    }
+    @media only screen and (max-width: 1000px) {
+        #container {
+            width: 80vw;
+        }
+    }
+    @media only screen and (max-width: 500px){
+        #container {
+            width: 100vw;
+        }
+        #fetched div input, #result .entry-name input{
+            position: relative;
+            margin-top: 0;
+        }
+        #fetched div p, .entry-name p{
+            text-align: center;
+            margin: 0;
+            line-height: 30px;
+        }
+        #custom div{
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #custom div input[type="button"]{
+            position: relative;
+            margin: 10px 20px;
+        }
     }
 </style>
 <body>
